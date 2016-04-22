@@ -1,5 +1,7 @@
 package test.filter.api;
 
+import shitsko.filter.api.SignalFilter;
+
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -52,7 +54,7 @@ public class FilterTest {
 
     public static void main (String ... args) throws InterruptedException {
         final int N = 100;
-        Filter filter = new RandomFilter(N); //TODO: replace by your implementation
+        Filter filter = new SignalFilter(N); //TODO: replace by your implementation
 
         AtomicInteger totalPassed = new AtomicInteger();
         Thread [] producers = new Thread[numberOfSignalsProducers];
