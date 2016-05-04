@@ -2,39 +2,43 @@ package shitsko.filter.api;
 
 import test.filter.api.Filter;
 
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * Created by AnriShitsko on 21.04.2016.
  */
 public class SignalFilter implements Filter {
 
-    // create the thread-local variable with initialValue = 0
-    private static final ThreadLocal<Integer> counter = new ThreadLocal<Integer>() {
-        @Override
-        protected Integer initialValue() {
-            return 0;
-        }
-    };
+    private BlockingQueue<Signal> signals;
 
     // filter limit
     private final int limit;
 
     // constructor with argument that initialize limit variable
-    public SignalFilter(int limit) {
+    public SignalFilter(int limit, BlockingQueue<Signal> signals) {
         this.limit = limit;
+        this.signals = signals;
     }
 
     // implement method from the interface Filter
     @Override
     public boolean isSignalAllowed() {
-        int count = counter.get();
-        if (count < limit)
-        {
-            counter.set(count + 1);
+        long condition = System.currentTimeMillis() - 60000; // one minute ago
+        int count = countOnCondition(signals, condition);
+        if (count < limit) {
             return true;
         }
+
         return false;
+    }
+
+    private int countOnCondition(BlockingQueue<Signal> signals, long condition) {
+        int count = 0;
+        for (Signal signal : signals) {
+            if (signal.getTime() > condition)
+                count++;
+        }
+
+        return count;
     }
 }
