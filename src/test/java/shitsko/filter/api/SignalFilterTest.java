@@ -18,11 +18,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class SignalFilterTest {
 
-    // one minute
-    private static final long TIMER = 120 * 1000;
+    private static final long TIMER = 90 * 1000;
 
     // number of the producers-threads
-    private static final int NUMBER_PRODUCERS = 1;
+    private static final int NUMBER_PRODUCERS = 2;
 
     // filter limit
     private static final int LIMIT = 100;
@@ -37,9 +36,6 @@ public class SignalFilterTest {
 
         // counter for successfully received signals
         AtomicInteger countSuccessSignals = new AtomicInteger();
-
-        // counter for all receiving signals
-        AtomicInteger countAllSignals = new AtomicInteger();
 
         // create producers-threads
         Thread[] producers = new Thread[NUMBER_PRODUCERS];

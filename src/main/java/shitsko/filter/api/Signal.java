@@ -5,11 +5,13 @@ package shitsko.filter.api;
  */
 public class Signal {
     private int id;
-    private long time;
+    private long sentTime;
+    private long expiredTime;
 
-    public Signal(int id, long time) {
+    public Signal(int id, long sentTime, long expiredTime) {
         this.id = id;
-        this.time = time;
+        this.sentTime = sentTime;
+        this.expiredTime = expiredTime;
     }
 
     public int getId() {
@@ -20,11 +22,15 @@ public class Signal {
         this.id = id;
     }
 
-    public long getTime() {
-        return time;
+    public long getSentTime() {
+        return sentTime;
     }
 
-    public void setTime(long time) {
-        this.time = time;
+    public void setSentTime(long time) {
+        this.sentTime = sentTime;
     }
+
+    public long getExpiredTime() { return expiredTime; }
+
+    public void setExpiredTime(long expiredTime) { this.expiredTime = expiredTime; }
 }

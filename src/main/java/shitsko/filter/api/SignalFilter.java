@@ -22,23 +22,40 @@ public class SignalFilter implements Filter {
 
     // implement method from the interface Filter
     @Override
-    public boolean isSignalAllowed() {
-        long condition = System.currentTimeMillis() - 60000; // one minute ago
-        int count = countOnCondition(signals, condition);
+    public synchronized boolean isSignalAllowed() {
+        long now = System.currentTimeMillis();
+        long condition = now - 60000;
+
+        int count = getCountByCondition(signals, condition);
+
         if (count < limit) {
             return true;
         }
 
+        removeExpiredSignals(signals, now);
+
         return false;
     }
 
-    private int countOnCondition(BlockingQueue<Signal> signals, long condition) {
+    private synchronized int getCountByCondition(BlockingQueue<Signal> signals, long condition) {
         int count = 0;
         for (Signal signal : signals) {
-            if (signal.getTime() > condition)
+            if (signal.getSentTime() > condition)
                 count++;
         }
 
         return count;
     }
+
+    private synchronized void removeExpiredSignals(BlockingQueue<Signal> signals, long now) {
+        for (Signal signal : signals) {
+            long expiredTime = signal.getExpiredTime();
+            System.out.println("Remove: now = " + now + "; expired =  " + expiredTime);
+            if (now > expiredTime) {
+                signals.remove(signal);
+                System.out.println("Signal " + signal.getId() + " is removed!");
+            }
+        }
+    }
+
 }

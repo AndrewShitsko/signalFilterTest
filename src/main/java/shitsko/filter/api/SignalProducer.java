@@ -13,7 +13,6 @@ public class SignalProducer extends Thread {
 
     private final Filter filter;
     private final AtomicInteger countSuccessSignals;
-    private final AtomicInteger countAllSignals = new AtomicInteger();
 
     private BlockingQueue<Signal> signals;
 
@@ -21,7 +20,6 @@ public class SignalProducer extends Thread {
     public SignalProducer(Filter filter, AtomicInteger countSuccessSignals, BlockingQueue<Signal> signals) {
         this.filter = filter;
         this.countSuccessSignals = countSuccessSignals;
-        //this.countAllSignals = countAllSignals;
         this.signals = signals;
     }
 
@@ -31,11 +29,11 @@ public class SignalProducer extends Thread {
         Random random = new Random();
         try {
             while(true) {
-                signals.put(new Signal(countAllSignals.incrementAndGet(), System.currentTimeMillis()));
                 if (filter.isSignalAllowed()) {
-                    countSuccessSignals.incrementAndGet();
+                    long now = System.currentTimeMillis();
+                    signals.put(new Signal(countSuccessSignals.incrementAndGet(), now, now + 60000));
                 }
-                Thread.sleep(random.nextInt(500));
+                Thread.sleep(1000);
             }
         } catch (InterruptedException e) {  }
     }
