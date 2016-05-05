@@ -11,16 +11,13 @@ public class SignalProducer extends Thread {
     private final AtomicInteger countSuccessSignals;
     private final AtomicInteger countAllSignals;
 
-    private BlockingQueue<Signal> signals;
-
     private final long milliseconds;
 
     // constructor with arguments to initialize objects
-    public SignalProducer(Filter filter, AtomicInteger countSuccessSignals, AtomicInteger countAllSignals, BlockingQueue<Signal> signals, long milliseconds) {
+    public SignalProducer(Filter filter, AtomicInteger countSuccessSignals, AtomicInteger countAllSignals, long milliseconds) {
         this.filter = filter;
         this.countSuccessSignals = countSuccessSignals;
         this.countAllSignals = countAllSignals;
-        this.signals = signals;
         this.milliseconds = milliseconds;
     }
 
@@ -31,8 +28,7 @@ public class SignalProducer extends Thread {
             while(true) {
                 countAllSignals.getAndIncrement();
                 if (filter.isSignalAllowed()) {
-                    long now = System.currentTimeMillis();
-                    signals.put(new Signal(countSuccessSignals.incrementAndGet(), now));
+                    countSuccessSignals.incrementAndGet();
                 }
                 Thread.sleep(milliseconds);
             }

@@ -24,11 +24,8 @@ public class SignalFilterTestAtTimer {
     @Test
     public void testSignalFilterAtTimer() {
 
-        // queue for the received signals
-        BlockingQueue<Signal> signals = new ArrayBlockingQueue<>(LIMIT);
-
         // create the filter
-        Filter filter = new SignalFilter(LIMIT, signals);
+        Filter filter = new SignalFilter(LIMIT);
 
         // counter for successfully received signals
         AtomicInteger countSuccessSignals = new AtomicInteger();
@@ -37,7 +34,7 @@ public class SignalFilterTestAtTimer {
         // create producers-threads
         Thread[] producers = new Thread[NUMBER_PRODUCERS];
         for (int i = 0; i < producers.length; i++)
-            producers[i] = new SignalProducer(filter, countSuccessSignals, countAllSignals, signals, 1000); // the big constructor only for the test
+            producers[i] = new SignalProducer(filter, countSuccessSignals, countAllSignals, 1000); // the big constructor only for the test
 
         // create the timer
         Timer timer = new Timer(true);
