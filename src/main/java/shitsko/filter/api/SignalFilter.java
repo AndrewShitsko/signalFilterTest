@@ -4,11 +4,9 @@ import test.filter.api.Filter;
 
 import java.util.concurrent.BlockingQueue;
 
-/**
- * Created by AnriShitsko on 21.04.2016.
- */
 public class SignalFilter implements Filter {
 
+    // queue for the receive signals
     private BlockingQueue<Signal> signals;
 
     // filter limit
@@ -23,39 +21,24 @@ public class SignalFilter implements Filter {
     // implement method from the interface Filter
     @Override
     public synchronized boolean isSignalAllowed() {
+        // get time at now in milliseconds
         long now = System.currentTimeMillis();
-        long condition = now - 60000;
 
-        int count = getCountByCondition(signals, condition);
+        // get count of received signals
+        int count = signals.size();
 
-        if (count < limit) {
-            return true;
-        }
+        // if-block to check count of signals at limit
+        if (count < limit) return true;
 
+        // remove expired signals
         removeExpiredSignals(signals, now);
 
         return false;
     }
 
-    private synchronized int getCountByCondition(BlockingQueue<Signal> signals, long condition) {
-        int count = 0;
-        for (Signal signal : signals) {
-            if (signal.getSentTime() > condition)
-                count++;
-        }
-
-        return count;
-    }
-
-    private synchronized void removeExpiredSignals(BlockingQueue<Signal> signals, long now) {
-        for (Signal signal : signals) {
-            long expiredTime = signal.getExpiredTime();
-            System.out.println("Remove: now = " + now + "; expired =  " + expiredTime);
-            if (now > expiredTime) {
-                signals.remove(signal);
-                System.out.println("Signal " + signal.getId() + " is removed!");
-            }
-        }
+    // method to remove expired signals
+    private void removeExpiredSignals(BlockingQueue<Signal> signals, long now) {
+        signals.stream().filter(signal -> now > (signal.getTime() + 60000)).forEach(signals::remove);
     }
 
 }

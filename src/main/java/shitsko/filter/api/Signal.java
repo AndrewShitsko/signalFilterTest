@@ -1,17 +1,12 @@
 package shitsko.filter.api;
 
-/**
- * Created by AnriShitsko on 04.05.2016.
- */
 public class Signal {
     private int id;
-    private long sentTime;
-    private long expiredTime;
+    private long time;
 
-    public Signal(int id, long sentTime, long expiredTime) {
+    public Signal(int id, long time) {
         this.id = id;
-        this.sentTime = sentTime;
-        this.expiredTime = expiredTime;
+        this.time = time;
     }
 
     public int getId() {
@@ -22,15 +17,11 @@ public class Signal {
         this.id = id;
     }
 
-    public long getSentTime() {
-        return sentTime;
+    public long getTime() {
+        return time;
     }
 
-    public void setSentTime(long time) {
-        this.sentTime = sentTime;
+    public void setTime(long time) {
+        this.time = time;
     }
-
-    public long getExpiredTime() { return expiredTime; }
-
-    public void setExpiredTime(long expiredTime) { this.expiredTime = expiredTime; }
 }
