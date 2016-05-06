@@ -2,7 +2,6 @@ package shitsko.filter.api;
 
 import test.filter.api.Filter;
 
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SignalProducer extends Thread {
